@@ -19,7 +19,7 @@ Makefile Commands:
 
 		Deletes "timing.txt" and "parallelProg02.tgz" from the directory, as part of cleaning up and saving space.
 
-	make test:
+	make test (deprecated):
 
 		Launches the program into a test mode, where it  runs through a set of generating predeterminated determined amounts of particles. In this mode, the radius is set to 1.0, and the shape is set to square. After completion of the test, the makefile will create a text document containing the run time of each individual file, called "timing.txt". Please see the next section for further detail.
 
