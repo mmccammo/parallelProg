@@ -3,15 +3,10 @@ parallelProg
 
 Examining the performance of the multi-threading library OpenMP, split over multiple cores
 
-
-/* readme.txt
-   Matt McCammon
-   August 26th, 2013
+============
 	
-   */
-
-////////////////
-
+Matt McCammon
+August 26th, 2013
 Readme
 
 Main Program:
