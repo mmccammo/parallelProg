@@ -1,0 +1,76 @@
+
+    public int m_DMSLat_Degrees;
+    public int m_DMSLat_Minutes;
+    public float m_DMSLat_Seconds;
+
+    public int m_DMSLon_Degrees;
+    public int m_DMSLon_Minutes;
+    public float m_DMSLon_Seconds;
+
+    public string m_DMSLat_String;
+    public string m_DMSLon_String;
+
+    public float m_DECLat;
+    public string m_DECLat_Dir;
+    public string m_DECLat_String;
+    public float m_DECLon;
+    public string m_DECLon_Dir;
+    public string m_DECLon_String;
+
+    public int m_GoogleZoomLevel = 17;
+    public string m_GoogleZoomLevelString;
+
+    public string m_GoogleAddress;
+    public string m_FinalQueryString;
+
+    //public System.Windows.Forms.WebBrowser m_WebBrowser;// = new System.Windows.Forms.WebBrowser();
+    //public bool m_BrowserInitiated = false;
+
+    public void LaunchGoogleMaps_LatLonCheck()
+    {
+        m_GoogleAddress = "https://www.google.com/maps/place/";
+
+        m_DECLat = m_HostController.currentGPSPosition.x;
+        m_DECLon = m_HostController.currentGPSPosition.y;
+
+        if (m_DECLat >= 0) m_DECLat_Dir = "N";
+        else m_DECLat_Dir = "S";
+
+        if (m_DECLon >= 0) m_DECLat_Dir = "W";
+        else m_DECLat_Dir = "E";
+
+        // Convert Decimal Lat to Degrees Minutes Seconds
+        m_DECLat *= 3600.0f;
+
+        m_DMSLat_Seconds = Mathf.Round((float)m_DECLat);
+        m_DMSLat_Degrees = (int)(m_DMSLat_Seconds / 3600f);
+        m_DMSLat_Seconds = Mathf.Abs(m_DMSLat_Seconds % 3600);
+
+        m_DMSLat_Minutes = (int)(m_DMSLat_Seconds / 60f);
+
+        m_DMSLat_Seconds %= 60.0f;
+        m_DMSLat_Degrees = Mathf.Abs(m_DMSLat_Degrees);
+
+        // Convert Decimal Lon to Degrees Minutes Seconds
+        m_DECLon *= 3600.0f;
+        m_DMSLon_Seconds = (int)Mathf.Round((float)m_DECLon);
+        m_DMSLon_Degrees = (int)(m_DMSLon_Seconds / 3600f);
+        m_DMSLon_Seconds = Mathf.Abs(m_DMSLon_Seconds % 3600);
+        m_DMSLon_Minutes = (int)(m_DMSLon_Seconds / 60f);
+
+        m_DMSLon_Seconds %= 60;
+        m_DMSLon_Degrees = Mathf.Abs(m_DMSLon_Degrees);
+
+        // Fill Out the Google Maps URL
+        m_DECLat_String = m_DECLat.ToString();
+        m_DECLon_String = m_DECLon.ToString();
+
+        m_DMSLat_String = m_DMSLat_Degrees + "%C2%B0" + m_DMSLat_Minutes + "'" + m_DMSLat_Seconds + "%22N";
+        m_DMSLon_String = m_DMSLon_Degrees + "%C2%B0" + m_DMSLon_Minutes + "'" + m_DMSLon_Seconds + "%22W";
+
+        m_GoogleZoomLevelString = m_GoogleZoomLevel.ToString() + "z/";
+
+        m_FinalQueryString = m_GoogleAddress + m_DMSLat_String + "+" + m_DMSLon_String + "/" + m_DECLat_String + "," + m_DECLon_String + "," + m_GoogleZoomLevelString;
+
+        Application.OpenURL(m_FinalQueryString);
+    }
