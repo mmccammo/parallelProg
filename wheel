@@ -1,0 +1,79 @@
+  // FIXME this needs wider implementation in the Entity or Vehicle class
+
+        if (m_SteeringWheel)
+        {
+            m_SteeringWheelCurrentTurnAngle = m_SteeringWheel.transform.localRotation.eulerAngles.y;
+            m_SteeringWheelCurrentTurnSpeed = 0;
+
+            m_WheelPosLeft = false;
+            m_WheelPosRight = false;
+            m_TurningLeft = false;
+            m_TurningRight = false;
+            m_LeftMax = false;
+            m_RightMax = false;
+
+            if (m_SteeringWheelCurrentTurnAngle <= 180)
+            {
+                m_SteeringWheelCurrentMaxTurnAngle = m_SteeringWheelMaxTurnAngle;
+                m_WheelPosRight = true;
+            }
+            else
+            {
+                m_SteeringWheelCurrentMaxTurnAngle = (360 - m_SteeringWheelMaxTurnAngle);
+                m_WheelPosLeft = true;
+            }
+
+            if (m_LHorizontalInput < 0) // Input Left
+            {
+                if(m_WheelPosLeft)
+                {
+                    if (m_SteeringWheelCurrentTurnAngle >= (360 - m_SteeringWheelMaxTurnAngle))
+                    {
+                        m_TurningLeft = true;
+                        m_SteeringWheelCurrentTurnSpeed = (-m_LHorizontalInput * m_SteeringWheelTurnSpeed * Time.deltaTime) * m_SteeringWheelMaxTurnAngle;
+                    }
+                    else m_LeftMax = true;
+                }
+                else
+                {
+                    m_TurningLeft = true;
+                    m_SteeringWheelCurrentTurnSpeed = (-m_LHorizontalInput * m_SteeringWheelTurnSpeed * Time.deltaTime) * m_SteeringWheelMaxTurnAngle;
+                }
+            }
+            if (m_LHorizontalInput > 0) // Input Right
+            {
+                if(m_WheelPosRight)
+                {
+                    if (m_SteeringWheelCurrentTurnAngle <= m_SteeringWheelMaxTurnAngle)
+                    {
+                        m_TurningRight = true;
+                        m_SteeringWheelCurrentTurnSpeed = (-m_LHorizontalInput * m_SteeringWheelTurnSpeed * Time.deltaTime) * m_SteeringWheelMaxTurnAngle;
+                    }
+                    else m_RightMax = true;
+                }
+                else
+                {
+                    m_TurningRight = true;
+                    m_SteeringWheelCurrentTurnSpeed = (-m_LHorizontalInput * m_SteeringWheelTurnSpeed * Time.deltaTime) * m_SteeringWheelMaxTurnAngle;
+                }
+            }
+
+            if (m_SteeringWheelCurrentTurnSpeed != 0) m_SteeringWheel.Rotate(m_SteeringWheelAxis, m_SteeringWheelCurrentTurnSpeed, Space.Self);
+        }
+    }
+
+    public Transform m_SteeringWheel;
+    public float m_SteeringWheelTurnSpeed = 1.0f;
+    public float m_SteeringWheelCurrentTurnAngle;
+    public float m_SteeringWheelCurrentTurnLocalAngle;
+    public float m_SteeringWheelCurrentTurnSpeed;
+    public Vector3 m_SteeringWheelAxis = new Vector3(1, 1, 0);
+    public float m_SteeringWheelMaxTurnAngle = 180.0f;
+    public float m_SteeringWheelCurrentMaxTurnAngle = 180.0f;
+    public bool m_WheelPosLeft;
+    public bool m_WheelPosRight;
+    public bool m_TurningLeft;
+    public bool m_TurningRight;
+    public bool m_LeftMax;
+    public bool m_RightMax;
+    
